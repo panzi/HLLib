@@ -4,4 +4,7 @@
 *.exe
 *.dll
 *.lib
-build
+HLLib/build
+HLLib/CMakeLists.txt.user
+HLExtract/build
+HLExtract/CMakeLists.txt.user
