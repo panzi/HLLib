@@ -153,6 +153,8 @@ HLLIB_API hlBool hlGetBooleanValidate(HLOption eOption, hlBool *pValue)
 	case HL_PACKAGE_BOUND:
 		*pValue = pPackage != 0;
 		return hlTrue;
+	default:
+		break;
 	}
 
 	return hlFalse;
@@ -170,6 +172,8 @@ HLLIB_API hlVoid hlSetBoolean(HLOption eOption, hlBool bValue)
 		break;
 	case HL_FORCE_DEFRAGMENT:
 		bForceDefragment = bValue;
+		break;
+	default:
 		break;
 	}
 }
@@ -191,7 +195,8 @@ HLLIB_API hlBool hlGetIntegerValidate(HLOption eOption, hlInt *pValue)
 
 HLLIB_API hlVoid hlSetInteger(HLOption eOption, hlInt iValue)
 {
-
+	(void)eOption;
+	(void)iValue;
 }
 
 HLLIB_API hlUInt hlGetUnsignedInteger(HLOption eOption)
@@ -269,7 +274,8 @@ HLLIB_API hlBool hlGetUnsignedIntegerValidate(HLOption eOption, hlUInt *pValue)
 
 HLLIB_API hlVoid hlSetUnsignedInteger(HLOption eOption, hlUInt iValue)
 {
-
+	(void)eOption;
+	(void)iValue;
 }
 
 HLLIB_API hlLongLong hlGetLongLong(HLOption eOption)
@@ -289,7 +295,8 @@ HLLIB_API hlBool hlGetLongLongValidate(HLOption eOption, hlLongLong *pValue)
 
 HLLIB_API hlVoid hlSetLongLong(HLOption eOption, hlLongLong iValue)
 {
-
+	(void)eOption;
+	(void)iValue;
 }
 
 HLLIB_API hlULongLong hlGetUnsignedLongLong(HLOption eOption)
@@ -361,7 +368,8 @@ HLLIB_API hlBool hlGetUnsignedLongLongValidate(HLOption eOption, hlULongLong *pV
 
 HLLIB_API hlVoid hlSetUnsignedLongLong(HLOption eOption, hlULongLong iValue)
 {
-
+	(void)eOption;
+	(void)iValue;
 }
 
 HLLIB_API hlFloat hlGetFloat(HLOption eOption)
@@ -373,12 +381,15 @@ HLLIB_API hlFloat hlGetFloat(HLOption eOption)
 
 HLLIB_API hlBool hlGetFloatValidate(HLOption eOption, hlFloat *pValue)
 {
+	(void)eOption;
+	(void)pValue;
 	return hlFalse;
 }
 
 HLLIB_API hlVoid hlSetFloat(HLOption eOption, hlFloat fValue)
 {
-	
+	(void)eOption;
+	(void)fValue;
 }
 
 HLLIB_API const hlChar *hlGetString(HLOption eOption)
@@ -414,7 +425,8 @@ HLLIB_API hlBool hlGetStringValidate(HLOption eOption, const hlChar **pValue)
 
 HLLIB_API hlVoid hlSetString(HLOption eOption, const hlChar *lpValue)
 {
-
+	(void)eOption;
+	(void)lpValue;
 }
 
 HLLIB_API const hlVoid *hlGetVoid(HLOption eOption)
@@ -429,52 +441,52 @@ HLLIB_API hlBool hlGetVoidValidate(HLOption eOption, const hlVoid **pValue)
 	switch(eOption)
 	{
 	case HL_PROC_OPEN:
-		*pValue = (const hlVoid *)pOpenProc;
+		*pValue = *(const hlVoid **)&pOpenProc;
 		return hlTrue;
 	case HL_PROC_CLOSE:
-		*pValue = (const hlVoid *)pCloseProc;
+		*pValue = *(const hlVoid **)&pCloseProc;
 		return hlTrue;
 	case HL_PROC_READ:
-		*pValue = (const hlVoid *)pReadProc;
+		*pValue = *(const hlVoid **)&pReadProc;
 		return hlTrue;
 	case HL_PROC_WRITE:
-		*pValue = (const hlVoid *)pWriteProc;
+		*pValue = *(const hlVoid **)&pWriteProc;
 		return hlTrue;
 	case HL_PROC_SEEK:
-		*pValue = (const hlVoid *)pSeekProc;
+		*pValue = *(const hlVoid **)&pSeekProc;
 		return hlTrue;
 	case HL_PROC_SEEK_EX:
-		*pValue = (const hlVoid *)pSeekExProc;
+		*pValue = *(const hlVoid **)&pSeekExProc;
 		return hlTrue;
 	case HL_PROC_TELL:
-		*pValue = (const hlVoid *)pTellProc;
+		*pValue = *(const hlVoid **)&pTellProc;
 		return hlTrue;
 	case HL_PROC_TELL_EX:
-		*pValue = (const hlVoid *)pTellExProc;
+		*pValue = *(const hlVoid **)&pTellExProc;
 		return hlTrue;
 	case HL_PROC_SIZE:
-		*pValue = (const hlVoid *)pSizeProc;
+		*pValue = *(const hlVoid **)&pSizeProc;
 		return hlTrue;
 	case HL_PROC_SIZE_EX:
-		*pValue = (const hlVoid *)pSizeExProc;
+		*pValue = *(const hlVoid **)&pSizeExProc;
 		return hlTrue;
 	case HL_PROC_EXTRACT_ITEM_START:
-		*pValue = (const hlVoid *)pExtractItemStartProc;
+		*pValue = *(const hlVoid **)&pExtractItemStartProc;
 		return hlTrue;
 	case HL_PROC_EXTRACT_ITEM_END:
-		*pValue = (const hlVoid *)pExtractItemEndProc;
+		*pValue = *(const hlVoid **)&pExtractItemEndProc;
 		return hlTrue;
 	case HL_PROC_EXTRACT_FILE_PROGRESS:
-		*pValue = (const hlVoid *)pExtractFileProgressProc;
+		*pValue = *(const hlVoid **)&pExtractFileProgressProc;
 		return hlTrue;
 	case HL_PROC_VALIDATE_FILE_PROGRESS:
-		*pValue = (const hlVoid *)pValidateFileProgressProc;
+		*pValue = *(const hlVoid **)&pValidateFileProgressProc;
 		return hlTrue;
 	case HL_PROC_DEFRAGMENT_PROGRESS:
-		*pValue = (const hlVoid *)pDefragmentProgressProc;
+		*pValue = *(const hlVoid **)&pDefragmentProgressProc;
 		return hlTrue;
 	case HL_PROC_DEFRAGMENT_PROGRESS_EX:
-		*pValue = (const hlVoid *)pDefragmentProgressExProc;
+		*pValue = *(const hlVoid **)&pDefragmentProgressExProc;
 		return hlTrue;
 	default:
 		return hlFalse;
@@ -486,52 +498,54 @@ HLLIB_API hlVoid hlSetVoid(HLOption eOption, const hlVoid *pValue)
 	switch(eOption)
 	{
 	case HL_PROC_OPEN:
-		pOpenProc = (POpenProc)pValue;
+		pOpenProc = *(POpenProc*)&pValue;
 		break;
 	case HL_PROC_CLOSE:
-		pCloseProc = (PCloseProc)pValue;
+		pCloseProc = *(PCloseProc*)&pValue;
 		break;
 	case HL_PROC_READ:
-		pReadProc = (PReadProc)pValue;
+		pReadProc = *(PReadProc*)&pValue;
 		break;
 	case HL_PROC_WRITE:
-		pWriteProc = (PWriteProc)pValue;
+		pWriteProc = *(PWriteProc*)&pValue;
 		break;
 	case HL_PROC_SEEK:
-		pSeekProc = (PSeekProc)pValue;
+		pSeekProc = *(PSeekProc*)&pValue;
 		break;
 	case HL_PROC_SEEK_EX:
-		pSeekExProc = (PSeekExProc)pValue;
+		pSeekExProc = *(PSeekExProc*)&pValue;
 		break;
 	case HL_PROC_TELL:
-		pTellProc = (PTellProc)pValue;
+		pTellProc = *(PTellProc*)&pValue;
 		break;
 	case HL_PROC_TELL_EX:
-		pTellExProc = (PTellExProc)pValue;
+		pTellExProc = *(PTellExProc*)&pValue;
 		break;
 	case HL_PROC_SIZE:
-		pSizeProc = (PSizeProc)pValue;
+		pSizeProc = *(PSizeProc*)&pValue;
 		break;
 	case HL_PROC_SIZE_EX:
-		pSizeExProc = (PSizeExProc)pValue;
+		pSizeExProc = *(PSizeExProc*)&pValue;
 		break;
 	case HL_PROC_EXTRACT_ITEM_START:
-		pExtractItemStartProc = (PExtractItemStartProc)pValue;
+		pExtractItemStartProc = *(PExtractItemStartProc*)&pValue;
 		break;
 	case HL_PROC_EXTRACT_ITEM_END:
-		pExtractItemEndProc = (PExtractItemEndProc)pValue;
+		pExtractItemEndProc = *(PExtractItemEndProc*)&pValue;
 		break;
 	case HL_PROC_EXTRACT_FILE_PROGRESS:
-		pExtractFileProgressProc = (PExtractFileProgressProc)pValue;
+		pExtractFileProgressProc = *(PExtractFileProgressProc*)&pValue;
 		break;
 	case HL_PROC_VALIDATE_FILE_PROGRESS:
-		pValidateFileProgressProc = (PValidateFileProgressProc)pValue;
+		pValidateFileProgressProc = *(PValidateFileProgressProc*)&pValue;
 		break;
 	case HL_PROC_DEFRAGMENT_PROGRESS:
-		pDefragmentProgressProc = (PDefragmentProgressProc)pValue;
+		pDefragmentProgressProc = *(PDefragmentProgressProc*)&pValue;
 		break;
 	case HL_PROC_DEFRAGMENT_PROGRESS_EX:
-		pDefragmentProgressExProc = (PDefragmentProgressExProc)pValue;
+		pDefragmentProgressExProc = *(PDefragmentProgressExProc*)&pValue;
+		break;
+	default:
 		break;
 	}
 }

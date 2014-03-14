@@ -446,9 +446,13 @@ hlBool CSGAFile::CSGASpecializedDirectory<TSGAHeader, TSGADirectoryHeader, TSGAS
 						hlAttributeSetString(&Attribute, CSGAFile::lpItemAttributeNames[eAttribute], CSGAFile::lpVerificationNames[CSGAFile::VERIFICATION_CRC]);
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	return hlFalse;
@@ -477,9 +481,13 @@ hlBool CSGAFile::CSGASpecializedDirectory<TSGAHeader, TSGADirectoryHeader, TSGAS
 						hlAttributeSetString(&Attribute, CSGAFile::lpItemAttributeNames[eAttribute], CSGAFile::lpVerificationNames[CSGAFile::VERIFICATION_CRC]);
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	return hlFalse;
@@ -505,12 +513,16 @@ hlBool CSGAFile::CSGASpecializedDirectory<TSGAHeader, TSGADirectoryHeader, TSGAS
 					}
 					case HL_SGA_ITEM_VERIFICATION:
 					{
-						hlAttributeSetString(&Attribute, CSGAFile::lpItemAttributeNames[eAttribute], CSGAFile::lpVerificationNames[File.uiDummy0 < CSGAFile::VERIFICATION_COUNT ? File.uiDummy0 : CSGAFile::VERIFICATION_NONE]);
+						hlAttributeSetString(&Attribute, CSGAFile::lpItemAttributeNames[eAttribute], CSGAFile::lpVerificationNames[File.uiDummy0 < CSGAFile::VERIFICATION_COUNT ? File.uiDummy0 : (hlUInt)CSGAFile::VERIFICATION_NONE]);
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	return hlFalse;
@@ -552,6 +564,8 @@ hlBool CSGAFile::CSGADirectory<TSGAHeader, TSGADirectoryHeader, TSGASection, TSG
 						}
 						return hlFalse;
 					}
+					default:
+						break;
 				}
 				break;
 			}
@@ -601,9 +615,13 @@ hlBool CSGAFile::CSGADirectory<TSGAHeader, TSGADirectoryHeader, TSGASection, TSG
 						hlAttributeSetUnsignedInteger(&Attribute, CSGAFile::lpItemAttributeNames[eAttribute], File.uiType, hlFalse);
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	return CSGASpecializedDirectory<TSGAHeader, TSGADirectoryHeader, TSGASection, TSGAFolder, TSGAFile>::GetItemAttributeInternal(pItem, eAttribute, Attribute);

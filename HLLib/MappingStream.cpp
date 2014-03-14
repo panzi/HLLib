@@ -15,7 +15,8 @@
 using namespace HLLib;
 using namespace HLLib::Streams;
 
-CMappingStream::CMappingStream(Mapping::CMapping &Mapping, hlULongLong uiMappingOffset, hlULongLong uiMappingSize, hlULongLong uiViewSize) : bOpened(hlFalse), uiMode(HL_MODE_INVALID), Mapping(Mapping), uiMappingOffset(uiMappingOffset), uiMappingSize(uiMappingSize), uiViewSize(uiViewSize), pView(0), uiPointer(0), uiLength(0)
+CMappingStream::CMappingStream(Mapping::CMapping &Mapping, hlULongLong uiMappingOffset, hlULongLong uiMappingSize, hlULongLong uiViewSize)
+: bOpened(hlFalse), uiMode(HL_MODE_INVALID), Mapping(Mapping), pView(0), uiMappingOffset(uiMappingOffset), uiMappingSize(uiMappingSize), uiViewSize(uiViewSize), uiPointer(0), uiLength(0)
 {
 	if(this->uiViewSize == 0)
 	{

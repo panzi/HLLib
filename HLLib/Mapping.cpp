@@ -15,7 +15,8 @@
 using namespace HLLib;
 using namespace HLLib::Mapping;
 
-CView::CView(CMapping *pMapping, hlVoid *lpView, hlULongLong uiAllocationOffset, hlULongLong uiAllocationLength, hlULongLong uiOffset, hlULongLong uiLength) : pMapping(pMapping), lpView(lpView), uiAllocationOffset(uiAllocationOffset), uiAllocationLength(uiAllocationLength), uiOffset(uiOffset), uiLength(uiLength == 0 ? uiAllocationLength - uiOffset : uiLength)
+CView::CView(CMapping *pMapping, hlVoid *lpView, hlULongLong uiAllocationOffset, hlULongLong uiAllocationLength, hlULongLong uiOffset, hlULongLong uiLength)
+	: pMapping(pMapping), lpView(lpView),uiOffset(uiOffset), uiLength(uiLength == 0 ? uiAllocationLength - uiOffset : uiLength), uiAllocationOffset(uiAllocationOffset), uiAllocationLength(uiAllocationLength)
 {
 	assert(this->uiOffset + this->uiLength <= this->uiAllocationLength);
 }
@@ -209,7 +210,7 @@ hlBool CMapping::Unmap(CView *&pView)
 
 hlVoid CMapping::UnmapInternal(CView &View)
 {
-
+	(void)View;
 }
 
 hlBool CMapping::Commit(CView &View)
@@ -227,11 +228,7 @@ hlBool CMapping::Commit(CView &View, hlULongLong uiOffset, hlULongLong uiLength)
 
 	if(uiOffset + uiLength > View.GetLength())
 	{
-#ifdef _WIN32
-		LastError.SetErrorMessageFormated("Requested range (%I64u, %I64u) does not fit inside view, (%I64u, %I64u).", uiOffset, uiLength, 0ULL, View.GetLength());
-#else
-		LastError.SetErrorMessageFormated("Requested range (%llu, %llu) does not fit inside view, (%llu, %llu).", uiOffset, uiLength, 0ULL, View.GetLength());
-#endif
+		LastError.SetErrorMessageFormated("Requested range (%" PRIu64 ", %" PRIu64 ") does not fit inside view, (%" PRIu64 ", %" PRIu64 ").", uiOffset, uiLength, (hlULongLong)0, View.GetLength());
 		return hlFalse;
 	}
 
@@ -246,5 +243,8 @@ hlBool CMapping::Commit(CView &View, hlULongLong uiOffset, hlULongLong uiLength)
 
 hlBool CMapping::CommitInternal(CView &View, hlULongLong uiOffset, hlULongLong uiLength)
 {
+	(void)View;
+	(void)uiOffset;
+	(void)uiLength;
 	return hlTrue;
 }

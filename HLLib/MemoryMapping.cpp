@@ -90,11 +90,7 @@ hlBool CMemoryMapping::MapInternal(CView *&pView, hlULongLong uiOffset, hlULongL
 
 	if(uiOffset + uiLength > this->uiBufferSize)
 	{
-#ifdef _WIN32
-		LastError.SetErrorMessageFormated("Requested view (%I64u, %I64u) does not fit inside mapping, (%I64u, %I64u).", uiOffset, uiLength, 0, this->uiBufferSize);
-#else
-		LastError.SetErrorMessageFormated("Requested view (%llu, %llu) does not fit inside mapping, (%llu, %llu).", uiOffset, uiLength, 0, this->uiBufferSize);
-#endif
+		LastError.SetErrorMessageFormated("Requested view (%" PRIu64 ", %" PRIu64 ") does not fit inside mapping, (%" PRIu64 ", %" PRIu64 ").", uiOffset, uiLength, (hlULongLong)0, this->uiBufferSize);
 		return hlFalse;
 	}
 

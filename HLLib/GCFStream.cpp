@@ -374,11 +374,7 @@ hlBool CGCFStream::Map(hlULongLong uiPointer)
 	{
 		if(this->uiBlockEntryOffset + this->uiDataBlockOffset < static_cast<hlULongLong>(this->GCFFile.lpDirectoryEntries[this->uiFileID].uiItemSize))
 		{
-#ifdef _WIN32
-			LastError.SetErrorMessageFormated("Unexpected end of GCF stream (%I64u B of %u B).  Has the GCF file been completely acquired?", this->uiBlockEntryOffset + this->uiDataBlockOffset, this->GCFFile.lpDirectoryEntries[this->uiFileID].uiItemSize);
-#else
-			LastError.SetErrorMessageFormated("Unexpected end of GCF stream (%llu B of %u B).  Has the GCF file been completely acquired?", this->uiBlockEntryOffset + this->uiDataBlockOffset, this->GCFFile.lpDirectoryEntries[this->uiFileID].uiItemSize);
-#endif
+			LastError.SetErrorMessageFormated("Unexpected end of GCF stream (%" PRIu64 " B of %u B).  Has the GCF file been completely acquired?", this->uiBlockEntryOffset + this->uiDataBlockOffset, this->GCFFile.lpDirectoryEntries[this->uiFileID].uiItemSize);
 		}
 
 		this->GCFFile.pMapping->Unmap(this->pView);

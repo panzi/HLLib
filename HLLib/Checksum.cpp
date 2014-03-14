@@ -352,7 +352,7 @@ hlVoid HLLib::MD5_Update(MD5Context& context, const hlByte *lpBuffer, hlUInt uiB
 
 hlVoid HLLib::MD5_Finalize(MD5Context& context, hlByte (&lpDigest)[16])
 {
-	hlULongLong uiLengthInBits = 8ULL * static_cast<hlULongLong>(context.uiLength);
+	hlULongLong uiLengthInBits = (hlULongLong)8UL * static_cast<hlULongLong>(context.uiLength);
 
 	hlULong uiBlockLength = context.uiLength % sizeof(context.lpBlock);
 	if(uiBlockLength < sizeof(context.lpBlock) - sizeof(hlULongLong))
@@ -484,7 +484,7 @@ hlVoid HLLib::SHA1_Update(SHA1Context& context, const hlByte *lpBuffer, hlUInt u
 
 hlVoid HLLib::SHA1_Finalize(SHA1Context& context, hlByte (&lpDigest)[20])
 {
-	hlULongLong uiLengthInBits = 8ULL * static_cast<hlULongLong>(context.uiLength);
+	hlULongLong uiLengthInBits = (hlULongLong)8UL * static_cast<hlULongLong>(context.uiLength);
 
 	hlULong uiBlockLength = context.uiLength % sizeof(context.lpBlock);
 	if(uiBlockLength < sizeof(context.lpBlock) - sizeof(hlULongLong))
@@ -498,7 +498,7 @@ hlVoid HLLib::SHA1_Finalize(SHA1Context& context, hlByte (&lpDigest)[20])
 
 	// Length needs to be big-endian.
 	uiLengthInBits = (uiLengthInBits << 32) | (uiLengthInBits >> 32);
-	uiLengthInBits = static_cast<hlULongLong>(SwapEndian(static_cast<hlULong>(uiLengthInBits & 0xFFFFFFFFULL))) | static_cast<hlULongLong>(SwapEndian(static_cast<hlULong>(uiLengthInBits >> 32))) << 32;
+	uiLengthInBits = static_cast<hlULongLong>(SwapEndian(static_cast<hlULong>(uiLengthInBits & (hlULongLong)0xFFFFFFFFUL))) | static_cast<hlULongLong>(SwapEndian(static_cast<hlULong>(uiLengthInBits >> 32))) << 32;
 	SHA1_Update(context, reinterpret_cast<hlByte*>(&uiLengthInBits), sizeof(uiLengthInBits));
 
 	for(hlULong i = 0; i < sizeof(context.lpState) / sizeof(context.lpState[0]); ++i)

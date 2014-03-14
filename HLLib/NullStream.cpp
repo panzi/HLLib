@@ -71,25 +71,33 @@ hlULongLong CNullStream::GetStreamPointer() const
 
 hlULongLong CNullStream::Seek(hlLongLong iOffset, HLSeekMode eSeekMode)
 {
+	(void)iOffset;
+	(void)eSeekMode;
 	return 0;
 }
 
 hlBool CNullStream::Read(hlChar &cChar)
 {
+	(void)cChar;
 	return hlFalse;
 }
 
 hlUInt CNullStream::Read(hlVoid *lpData, hlUInt uiBytes)
 {
+	(void)lpData;
+	(void)uiBytes;
 	return 0;
 }
 
 hlBool CNullStream::Write(hlChar cChar)
 {
+	(void)cChar;
 	return hlFalse;
 }
 
 hlUInt CNullStream::Write(const hlVoid *lpData, hlUInt uiBytes)
 {
+	(void)lpData;
+	(void)uiBytes;
 	return 0;
 }

@@ -131,7 +131,7 @@ namespace HLLib
 			VERIFICATION_CRC_BLOCKS,
 			VERIFICATION_MD5_BLOCKS,
 			VERIFICATION_SHA1_BLOCKS,
-			VERIFICATION_COUNT,
+			VERIFICATION_COUNT
 		};
 
 		#pragma pack()
@@ -276,10 +276,10 @@ namespace HLLib
 		typedef CSGADirectory<SGAHeader6, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile6> CSGADirectory6;
 		typedef CSGADirectory<SGAHeader6, SGADirectoryHeader7, SGASection5, SGAFolder5, SGAFile7> CSGADirectory7;
 
-		friend CSGADirectory4;
-		friend CSGADirectory5;
-		friend CSGADirectory6;
-		friend CSGADirectory7;
+		friend class CSGADirectory<SGAHeader4, SGADirectoryHeader4, SGASection4, SGAFolder4, SGAFile4>;
+		friend class CSGADirectory<SGAHeader4, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile4>;
+		friend class CSGADirectory<SGAHeader6, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile6>;
+		friend class CSGADirectory<SGAHeader6, SGADirectoryHeader7, SGASection5, SGAFolder5, SGAFile7>;
 
 	private:
 		static const char *lpAttributeNames[];

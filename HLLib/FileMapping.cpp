@@ -132,7 +132,7 @@ hlBool CFileMapping::OpenInternal(hlUInt uiMode)
 		}
 	}
 #else
-	hlInt iMode;
+	hlInt iMode = 0;
 	
 	if((uiMode & HL_MODE_READ) && (uiMode & HL_MODE_WRITE))
 	{
@@ -267,11 +267,7 @@ hlBool CFileMapping::MapInternal(CView *&pView, hlULongLong uiOffset, hlULongLon
 	{
 		if(uiOffset + uiLength > this->uiViewSize)
 		{
-#ifdef _WIN32
-			LastError.SetErrorMessageFormated("Requested view (%I64u, %I64u) does not fit inside mapping, (%I64u, %I64u).", uiOffset, uiLength, 0ULL, this->uiViewSize);
-#else
-			LastError.SetErrorMessageFormated("Requested view (%llu, %llu) does not fit inside mapping, (%llu, %llu).", uiOffset, uiLength, 0ULL, this->uiViewSize);
-#endif
+			LastError.SetErrorMessageFormated("Requested view (%" PRIu64 ", %" PRIu64 ") does not fit inside mapping, (%" PRIu64 ", %" PRIu64 ").", uiOffset, uiLength, (hlULongLong)0UL, this->uiViewSize);
 			return hlFalse;
 		}
 
@@ -283,11 +279,7 @@ hlBool CFileMapping::MapInternal(CView *&pView, hlULongLong uiOffset, hlULongLon
 
 		if(uiOffset + uiLength > uiMappingSize)
 		{
-#ifdef _WIN32
-			LastError.SetErrorMessageFormated("Requested view (%I64u, %I64u) does not fit inside mapping, (%I64u, %I64u).", uiOffset, uiLength, 0ULL, this->uiViewSize);
-#else
-			LastError.SetErrorMessageFormated("Requested view (%llu, %llu) does not fit inside mapping, (%llu, %llu).", uiOffset, uiLength, 0ULL, this->uiViewSize);
-#endif
+			LastError.SetErrorMessageFormated("Requested view (%" PRIu64 ", %" PRIu64 ") does not fit inside mapping, (%" PRIu64 ", %" PRIu64 ").", uiOffset, uiLength, (hlULongLong)0UL, this->uiViewSize);
 			return hlFalse;
 		}
 

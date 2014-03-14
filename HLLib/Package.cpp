@@ -269,11 +269,14 @@ hlUInt CPackage::GetAttributeCountInternal() const
 
 const hlChar *CPackage::GetAttributeNameInternal(HLPackageAttribute eAttribute) const
 {
+	(void)eAttribute;
 	return 0;
 }
 
 hlBool CPackage::GetAttributeInternal(HLPackageAttribute eAttribute, HLAttribute &Attribute) const
 {
+	(void)eAttribute;
+	(void)Attribute;
 	return hlFalse;
 }
 
@@ -317,11 +320,15 @@ hlUInt CPackage::GetItemAttributeCountInternal() const
 
 const hlChar *CPackage::GetItemAttributeNameInternal(HLPackageAttribute eAttribute) const
 {
+	(void)eAttribute;
 	return 0;
 }
 
 hlBool CPackage::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackageAttribute eAttribute, HLAttribute &Attribute) const
 {
+	(void)pItem;
+	(void)eAttribute;
+	(void)Attribute;
 	return hlFalse;
 }
 
@@ -340,6 +347,7 @@ hlBool CPackage::GetFileExtractable(const CDirectoryFile *pFile, hlBool &bExtrac
 
 hlBool CPackage::GetFileExtractableInternal(const CDirectoryFile *pFile, hlBool &bExtractable) const
 {
+	(void)pFile;
 	bExtractable = hlTrue;
 	return hlTrue;
 }
@@ -359,6 +367,7 @@ hlBool CPackage::GetFileValidation(const CDirectoryFile *pFile, HLValidation &eV
 
 hlBool CPackage::GetFileValidationInternal(const CDirectoryFile *pFile, HLValidation &eValidation) const
 {
+	(void)pFile;
 	eValidation = HL_VALIDATES_ASSUMED_OK;
 	return hlTrue;
 }
@@ -431,5 +440,5 @@ hlVoid CPackage::ReleaseStream(Streams::IStream *pStream) const
 
 hlVoid CPackage::ReleaseStreamInternal(Streams::IStream &Stream) const
 {
-
+	(void)Stream;
 }

@@ -18,12 +18,14 @@
 #	else
 #		define HLLIB_API __declspec(dllimport)
 #	endif
+#	define HLLIB_PRINTF(FMT,ARGS)
 #else
 #	if defined(HAVE_GCCVISIBILITYPATCH) || __GNUC__ >= 4
 #		define HLLIB_API __attribute__ ((visibility("default")))
 #	else
 #		define HLLIB_API
 #	endif
+#	define HLLIB_PRINTF(FMT,ARGS) __attribute__((format(printf, FMT, ARGS)))
 #endif
 
 typedef unsigned char		hlBool;
@@ -40,19 +42,28 @@ typedef signed int			hlInt;
 typedef unsigned int		hlUInt;
 typedef signed long			hlLong;
 typedef unsigned long		hlULong;
-typedef signed long long	hlLongLong;
-typedef unsigned long long	hlULongLong;
 typedef float				hlSingle;
 typedef double				hlDouble;
 typedef void				hlVoid;
 
 #ifdef _MSC_VER
+	typedef signed long long	hlLongLong;
+	typedef unsigned long long	hlULongLong;
 	typedef unsigned __int8		hlUInt8;
 	typedef unsigned __int16	hlUInt16;
 	typedef unsigned __int32	hlUInt32;
 	typedef unsigned __int64	hlUInt64;
+
+#	define PRId64 "I64d"
+#	define PRIu64 "I64u"
+
 #else
 #	include <stdint.h>
+#	include <inttypes.h>
+
+	// long long is not in the C++ standard
+	typedef int64_t		hlLongLong;
+	typedef uint64_t	hlULongLong;
 
 	typedef uint8_t		hlUInt8;
 	typedef uint16_t	hlUInt16;

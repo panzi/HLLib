@@ -82,7 +82,7 @@ hlBool CFileStream::Open(hlUInt uiMode)
 		return hlFalse;
 	}
 #else
-	hlInt iMode;
+	hlInt iMode = 0;
 	
 	if((uiMode & HL_MODE_READ) && (uiMode & HL_MODE_WRITE))
 	{
@@ -215,6 +215,8 @@ hlULongLong CFileStream::Seek(hlLongLong iOffset, HLSeekMode eSeekMode)
 		break;
 	case HL_SEEK_END:
 		iMode = SEEK_END;
+		break;
+	default:
 		break;
 	}
 
