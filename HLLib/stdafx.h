@@ -18,13 +18,16 @@
 #	else
 #		define HLLIB_API __declspec(dllimport)
 #	endif
+#	define HLLIB_LOCAL
 #	define HLLIB_PRINTF(FMT,ARGS)
 #	define HLLIB_SENTINEL(SENTINEL)
 #else
 #	if defined(HAVE_GCCVISIBILITYPATCH) || __GNUC__ >= 4
 #		define HLLIB_API __attribute__ ((visibility("default")))
+#		define HLLIB_LOCAL __attribute__ ((visibility("hidden")))
 #	else
 #		define HLLIB_API
+#		define HLLIB_LOCAL
 #	endif
 #	define HLLIB_PRINTF(FMT,ARGS) __attribute__((format(printf, FMT, ARGS)))
 #	define HLLIB_SENTINEL(SENTINEL) __attribute__((sentinel(SENTINEL)))
