@@ -66,6 +66,14 @@ set(hllib_HDRS BSPFile.h Checksum.h DebugMemory.h DirectoryFile.h DirectoryFolde
 	SGAFile.h stdafx.h Stream.h StreamMapping.h Streams.h Utility.h VBSPFile.h VPKFile.h
 	WADFile.h Wrapper.h XZPFile.h ZIPFile.h)
 
+include(CheckFunctionExists)
+check_function_exists(snprintf HAVE_SNPRINTF)
+
+if(NOT HAVE_SNPRINTF)
+	set(hllib_SRCS ${hllib_SRCS} snprintf.c)
+	set(hllib_HDRS ${hllib_HDRS} snprintf.h)
+endif()
+
 add_library(hllib SHARED ${hllib_SRCS} ${hllib_HDRS} HLLib.rc)
 target_link_libraries(hllib ${ZLIB_LIBRARIES})
 set_target_properties(hllib PROPERTIES SOVERSION ${HLLIB_MAJOR_VERSION} VERSION ${HLLIB_VERSION})
