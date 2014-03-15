@@ -68,10 +68,28 @@ set(hllib_HDRS BSPFile.h Checksum.h DebugMemory.h DirectoryFile.h DirectoryFolde
 
 include(CheckFunctionExists)
 check_function_exists(snprintf HAVE_SNPRINTF)
+check_function_exists(strlcpy HAVE_STRLCPY)
+check_function_exists(strlcat HAVE_STRLCAT)
 
 if(NOT HAVE_SNPRINTF)
 	set(hllib_SRCS ${hllib_SRCS} snprintf.c)
 	set(hllib_HDRS ${hllib_HDRS} snprintf.h)
+else()
+	add_definitions(-DHAVE_SNPRINTF)
+endif()
+
+if(NOT HAVE_STRLCPY)
+	set(hllib_SRCS ${hllib_SRCS} strlcpy.c)
+	set(hllib_HDRS ${hllib_HDRS} strlcpy.h)
+else()
+	add_definitions(-DHAVE_STRLCPY)
+endif()
+
+if(NOT HAVE_STRLCAT)
+	set(hllib_SRCS ${hllib_SRCS} strlcat.c)
+	set(hllib_HDRS ${hllib_HDRS} strlcat.h)
+else()
+	add_definitions(-DHAVE_STRLCAT)
 endif()
 
 add_library(hllib SHARED ${hllib_SRCS} ${hllib_HDRS} HLLib.rc)

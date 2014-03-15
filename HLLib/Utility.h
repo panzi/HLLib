@@ -30,6 +30,9 @@ namespace HLLib
 	extern hlChar NibbleToChar(hlByte uiNibble);
 	extern hlUInt BufferToHexString(const hlByte *lpBuffer, hlUInt uiBufferSize, hlChar* lpString, hlUInt uiStringSize);
 	extern hlUInt WStringToString(const hlWChar *lpSource, hlChar* lpDest, hlUInt uiDestSize);
+
+	extern hlChar *StringCopy(const hlChar *lpSource);
+	extern hlChar *StringJoin(const hlChar *lpFirst, ...) HLLIB_SENTINEL(0);
 }
 
 #endif

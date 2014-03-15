@@ -246,7 +246,7 @@ CDirectoryFolder *CZIPFile::CreateRoot()
 					hlChar *lpToken = strtok(lpFileName, "/\\");
 					while(lpToken != 0)
 					{
-						strcpy(lpTemp, lpToken);
+						strlcpy(lpTemp, lpToken, sizeof(lpTemp));
 
 						lpToken = strtok(0, "/\\");
 

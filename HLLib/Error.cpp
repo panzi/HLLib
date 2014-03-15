@@ -57,7 +57,7 @@ const hlChar *CError::GetShortFormattedErrorMessage()
 		}
 		else
 		{
-			strncpy(this->lpShortFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
+			strlcpy(this->lpShortFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
 		}
 	}
 	else
@@ -78,7 +78,7 @@ const hlChar *CError::GetLongFormattedErrorMessage()
 		}
 		else
 		{
-			strncpy(this->lpLongFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
+			strlcpy(this->lpLongFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
 		}
 	}
 	else
@@ -98,7 +98,7 @@ hlVoid CError::SetErrorMessageFormated(const hlChar *lpFormat, ...)
 {
 	va_list ArgumentList;
 	va_start(ArgumentList, lpFormat);
-	vsprintf(this->lpError, lpFormat, ArgumentList);
+	vsnprintf(this->lpError, ERROR_STRING_SIZE, lpFormat, ArgumentList);
 	va_end(ArgumentList);
 
 	this->uiSystemError = 0;
@@ -114,7 +114,7 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 {
 	va_list ArgumentList;
 	va_start(ArgumentList, lpFormat);
-	vsprintf(this->lpError, lpFormat, ArgumentList);
+	vsnprintf(this->lpError, ERROR_STRING_SIZE, lpFormat, ArgumentList);
 	va_end(ArgumentList);
 
 #ifdef _WIN32
@@ -124,7 +124,7 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 
 	if(FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, this->uiSystemError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&lpMessage, 0, NULL))
 	{
-		strncpy(this->lpSystemError, (hlChar *)lpMessage, ERROR_STRING_SIZE);
+		strlcpy(this->lpSystemError, (hlChar *)lpMessage, ERROR_STRING_SIZE);
 
 		LocalFree(lpMessage);
 #else
@@ -134,7 +134,7 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 
 	if(lpMessage != 0)
 	{
-		strncpy(this->lpSystemError, lpMessage, ERROR_STRING_SIZE);
+		strlcpy(this->lpSystemError, lpMessage, ERROR_STRING_SIZE);
 #endif
 
 		hlUInt uiLength = (hlUInt)strlen(this->lpSystemError);
@@ -147,6 +147,6 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 	}
 	else
 	{
-		strncpy(this->lpSystemError, "<Unable to retrieve system error message string.>", ERROR_STRING_SIZE);
+		strlcpy(this->lpSystemError, "<Unable to retrieve system error message string.>", ERROR_STRING_SIZE);
 	}
 }

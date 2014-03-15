@@ -11,6 +11,7 @@
 
 #include "HLLib.h"
 #include "FileStream.h"
+#include "Utility.h"
 
 using namespace HLLib;
 using namespace HLLib::Streams;
@@ -21,8 +22,7 @@ CFileStream::CFileStream(const hlChar *lpFileName) : hFile(0), uiMode(HL_MODE_IN
 CFileStream::CFileStream(const hlChar *lpFileName) : iFile(-1), uiMode(HL_MODE_INVALID)
 #endif
 {
-	this->lpFileName = new hlChar[strlen(lpFileName) + 1];
-	strcpy(this->lpFileName, lpFileName);
+	this->lpFileName = StringCopy(lpFileName);
 }
 
 CFileStream::~CFileStream()

@@ -87,8 +87,7 @@ hlVoid CNCFFile::SetRootPath(const hlChar *lpRootPath)
 		return;
 	}
 
-	this->lpRootPath = new hlChar[strlen(lpRootPath) + 1];
-	strcpy(this->lpRootPath, lpRootPath);
+    this->lpRootPath = StringCopy(lpRootPath);
 }
 
 hlBool CNCFFile::MapDataStructures()
@@ -383,7 +382,7 @@ hlBool CNCFFile::GetFileExtractableInternal(const CDirectoryFile *pFile, hlBool 
 		hlChar lpTemp[512];
 		this->GetPath(pFile, lpTemp, sizeof(lpTemp));
 
-		hlUInt uiSize;
+        hlUInt uiSize = 0;
 		if(HLLib::GetFileSize(lpTemp, uiSize))
 		{
 			if(uiSize >= this->lpDirectoryEntries[pFile->GetID()].uiItemSize)
@@ -410,7 +409,7 @@ hlBool CNCFFile::GetFileValidationInternal(const CDirectoryFile *pFile, HLValida
 		hlChar lpTemp[512];
 		this->GetPath(pFile, lpTemp, sizeof(lpTemp));
 
-		hlUInt uiSize;
+        hlUInt uiSize = 0;
 		if(HLLib::GetFileSize(lpTemp, uiSize))
 		{
 			if(uiSize < this->lpDirectoryEntries[pFile->GetID()].uiItemSize)
@@ -541,7 +540,7 @@ hlBool CNCFFile::CreateStreamInternal(const CDirectoryFile *pFile, Streams::IStr
 		hlChar lpTemp[512];
 		this->GetPath(pFile, lpTemp, sizeof(lpTemp));
 
-		hlUInt uiSize;
+        hlUInt uiSize = 0;
 		if(HLLib::GetFileSize(lpTemp, uiSize))
 		{
 			if(uiSize >= this->lpDirectoryEntries[pFile->GetID()].uiItemSize)
@@ -577,34 +576,32 @@ hlBool CNCFFile::CreateStreamInternal(const CDirectoryFile *pFile, Streams::IStr
 	}
 }
 
+static hlVoid GetPath(const hlChar *lpRootPath, const CDirectoryItem *pItem, hlChar *lpPath, hlUInt uiPathSize)
+{
+    const CDirectoryItem *pParent = pItem->GetParent();
+    if(pParent != 0) {
+        GetPath(lpRootPath, pParent, lpPath, uiPathSize);
+        strlcat(lpPath, PATH_SEPARATOR_STRING, uiPathSize);
+        strlcat(lpPath, pItem->GetName(), uiPathSize);
+    }
+    else if(lpRootPath != 0) {
+        strlcpy(lpPath, lpRootPath, uiPathSize);
+    }
+    else {
+        strlcpy(lpPath, "", uiPathSize);
+    }
+}
+
 hlVoid CNCFFile::GetPath(const CDirectoryFile *pFile, hlChar *lpPath, hlUInt uiPathSize) const
 {
-	hlChar *lpTemp = new hlChar[uiPathSize];
+    const CDirectoryItem *pParent = pFile->GetParent();
 
-	strncpy(lpPath, pFile->GetName(), uiPathSize);
-	lpPath[uiPathSize - 1] = '\0';
-
-	const CDirectoryItem *pItem = pFile->GetParent();
-	while(pItem)
-	{
-		strcpy(lpTemp, lpPath);
-
-		if(pItem->GetParent() == 0)
-		{
-			strncpy(lpPath, this->lpRootPath, uiPathSize);
-		}
-		else
-		{
-			strncpy(lpPath, pItem->GetName(), uiPathSize);
-		}
-		lpPath[uiPathSize - 1] = '\0';
-
-		strncat(lpPath, PATH_SEPARATOR_STRING, uiPathSize - strlen(lpPath) - 1);
-
-		strncat(lpPath, lpTemp, uiPathSize - strlen(lpPath) - 1);
-
-		pItem = pItem->GetParent();
-	}
-
-	delete []lpTemp;
+    if(pParent != 0) {
+        ::GetPath(lpRootPath, pParent, lpPath, uiPathSize);
+        strlcat(lpPath, PATH_SEPARATOR_STRING, uiPathSize);
+        strlcat(lpPath, pFile->GetName(), uiPathSize);
+    }
+    else {
+        strlcpy(lpPath, pFile->GetName(), uiPathSize);
+    }
 }

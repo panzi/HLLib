@@ -565,8 +565,7 @@ HLLIB_API hlVoid hlAttributeSetBoolean(HLAttribute *pAttribute, const hlChar *lp
 	pAttribute->eAttributeType = HL_ATTRIBUTE_BOOLEAN;
 	if(lpName != 0)
 	{
-		strncpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
-		pAttribute->lpName[sizeof(pAttribute->lpName) - 1] = '\0';
+		strlcpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
 	}
 	pAttribute->Value.Boolean.bValue = bValue;
 }
@@ -586,8 +585,7 @@ HLLIB_API hlVoid hlAttributeSetInteger(HLAttribute *pAttribute, const hlChar *lp
 	pAttribute->eAttributeType = HL_ATTRIBUTE_INTEGER;
 	if(lpName != 0)
 	{
-		strncpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
-		pAttribute->lpName[sizeof(pAttribute->lpName) - 1] = '\0';
+		strlcpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
 	}
 	pAttribute->Value.Integer.iValue = iValue;
 }
@@ -607,8 +605,7 @@ HLLIB_API hlVoid hlAttributeSetUnsignedInteger(HLAttribute *pAttribute, const hl
 	pAttribute->eAttributeType = HL_ATTRIBUTE_UNSIGNED_INTEGER;
 	if(lpName != 0)
 	{
-		strncpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
-		pAttribute->lpName[sizeof(pAttribute->lpName) - 1] = '\0';
+		strlcpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
 	}
 	pAttribute->Value.UnsignedInteger.uiValue = uiValue;
 	pAttribute->Value.UnsignedInteger.bHexadecimal = bHexadecimal;
@@ -629,8 +626,7 @@ HLLIB_API hlVoid hlAttributeSetFloat(HLAttribute *pAttribute, const hlChar *lpNa
 	pAttribute->eAttributeType = HL_ATTRIBUTE_FLOAT;
 	if(lpName != 0)
 	{
-		strncpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
-		pAttribute->lpName[sizeof(pAttribute->lpName) - 1] = '\0';
+		strlcpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
 	}
 	pAttribute->Value.Float.fValue = fValue;
 }
@@ -650,13 +646,11 @@ HLLIB_API hlVoid hlAttributeSetString(HLAttribute *pAttribute, const hlChar *lpN
 	pAttribute->eAttributeType = HL_ATTRIBUTE_STRING;
 	if(lpName != 0)
 	{
-		strncpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
-		pAttribute->lpName[sizeof(pAttribute->lpName) - 1] = '\0';
+		strlcpy(pAttribute->lpName, lpName, sizeof(pAttribute->lpName));
 	}
 	if(lpValue != 0)
 	{
-		strncpy(pAttribute->Value.String.lpValue, lpValue, sizeof(pAttribute->Value.String.lpValue));
-		pAttribute->Value.String.lpValue[sizeof(pAttribute->Value.String.lpValue) - 1] = '\0';
+		strlcpy(pAttribute->Value.String.lpValue, lpValue, sizeof(pAttribute->Value.String.lpValue));
 	}
 	else
 	{

@@ -94,7 +94,7 @@ CDirectoryFolder *CWADFile::CreateRoot()
 	for(hlUInt i = 0; i < this->pHeader->uiLumpCount; i++)
 	{
 		hlChar lpName[64];
-		sprintf(lpName, "%s.bmp", this->lpLumps[i].lpName);
+		snprintf(lpName, sizeof(lpName), "%s.bmp", this->lpLumps[i].lpName);
 
 		// Add the lump as a bitmap.
 		pRoot->AddFile(lpName, i);

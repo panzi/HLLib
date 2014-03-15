@@ -95,22 +95,17 @@ hlBool CDirectoryFile::Extract(const hlChar *lpPath) const
 {
 	hlExtractItemStart(this);
 
-	hlChar *lpName = new hlChar[strlen(this->GetName()) + 1];
-	strcpy(lpName, this->GetName());
+	hlChar *lpName = StringCopy(this->GetName());
 	RemoveIllegalCharacters(lpName);
 
 	hlChar *lpFileName;
 	if(lpPath == 0 || *lpPath == '\0')
 	{
-		lpFileName = new hlChar[strlen(lpName) + 1];
-		strcpy(lpFileName, lpName);
+		lpFileName = StringCopy(lpName);
 	}
 	else
 	{
-		lpFileName = new hlChar[strlen(lpPath) + 1 + strlen(lpName) + 1];
-		strcpy(lpFileName, lpPath);
-		strcat(lpFileName, PATH_SEPARATOR_STRING);
-		strcat(lpFileName, lpName);
+		lpFileName = StringJoin(lpPath, PATH_SEPARATOR_STRING, lpName, NULL);
 	}
 
 	FixupIllegalCharacters(lpFileName);

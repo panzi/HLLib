@@ -214,7 +214,7 @@ CDirectoryFolder *CVBSPFile::CreateRoot()
 		}
 		else
 		{
-			strcat(lpFileName, ".ent");
+			strlcat(lpFileName, ".ent", sizeof(lpFileName));
 			pRoot->AddFile(lpFileName, HL_VBSP_LUMP_ENTITIES);
 		}
 	}
@@ -228,7 +228,7 @@ CDirectoryFolder *CVBSPFile::CreateRoot()
 		}
 		else
 		{
-			strcat(lpFileName, ".zip");
+			strlcat(lpFileName, ".zip", sizeof(lpFileName));
 			pRoot->AddFile(lpFileName, HL_VBSP_LUMP_PAKFILE);
 		}
 	}
@@ -242,11 +242,11 @@ CDirectoryFolder *CVBSPFile::CreateRoot()
 			this->GetFileName(lpTemp, sizeof(lpTemp) - 10);
 			if(*lpTemp == '\0')
 			{
-				sprintf(lpFileName, "lump_l_%d.lmp", i);
+				snprintf(lpFileName, sizeof(lpFileName), "lump_l_%d.lmp", i);
 			}
 			else
 			{
-				sprintf(lpFileName, "%s_l_%d.lmp", lpTemp, i);
+				snprintf(lpFileName, sizeof(lpFileName), "%s_l_%d.lmp", lpTemp, i);
 			}
 			pLumpFolder->AddFile(lpFileName, HL_VBSP_LUMP_COUNT + i);
 		}
@@ -283,7 +283,7 @@ CDirectoryFolder *CVBSPFile::CreateRoot()
 						hlChar *lpToken = strtok(lpFileName, "/\\");
 						while(lpToken != 0)
 						{
-							strcpy(lpTemp, lpToken);
+							strlcpy(lpTemp, lpToken, sizeof(lpTemp));
 
 							lpToken = strtok(0, "/\\");
 
@@ -722,6 +722,5 @@ hlVoid CVBSPFile::GetFileName(hlChar *lpBuffer, hlUInt uiBufferSize)
 		uiBufferSize = (hlUInt)(lpEnd - lpStart) + 1;
 	}
 
-	strncpy(lpBuffer, lpStart, uiBufferSize);
-	lpBuffer[uiBufferSize - 1] = '\0';
+	strlcpy(lpBuffer, lpStart, uiBufferSize);
 }

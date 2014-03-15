@@ -136,8 +136,7 @@ const CDirectoryItem *CDirectoryFolder::GetRelativeItem(const hlChar *lpPath, HL
 {
 	const CDirectoryFolder *pFolder = this;
 
-	hlChar *lpTemp = new hlChar[strlen(lpPath) + 1];
-	strcpy(lpTemp, lpPath);
+	hlChar *lpTemp = StringCopy(lpPath);
 
 	hlChar *lpToken = strtok(lpTemp, "\\/");
 	if(lpToken != 0 && this->Compare(pFolder->GetName(), lpToken, eFind) == 0)
@@ -657,22 +656,17 @@ hlBool CDirectoryFolder::Extract(const hlChar *lpPath) const
 {
 	hlExtractItemStart(this);
 
-	hlChar *lpName = new hlChar[strlen(this->GetName()) + 1];
-	strcpy(lpName, this->GetName());
+	hlChar *lpName = StringCopy(this->GetName());
 	RemoveIllegalCharacters(lpName);
 
 	hlChar *lpFolderName;
 	if(lpPath == 0 || *lpPath == '\0')
 	{
-		lpFolderName = new hlChar[strlen(lpName) + 1];
-		strcpy(lpFolderName, lpName);
+		lpFolderName = StringCopy(lpName);
 	}
 	else
 	{
-		lpFolderName = new hlChar[strlen(lpPath) + 1 + strlen(lpName) + 1];
-		strcpy(lpFolderName, lpPath);
-		strcat(lpFolderName, PATH_SEPARATOR_STRING);
-		strcat(lpFolderName, lpName);
+		lpFolderName = StringJoin(lpPath, PATH_SEPARATOR_STRING, lpName, NULL);
 	}
 
 	FixupIllegalCharacters(lpFolderName);

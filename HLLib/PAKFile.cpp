@@ -88,7 +88,7 @@ CDirectoryFolder *CPAKFile::CreateRoot()
 	for(hlUInt i = 0; i < uiItemCount; i++)
 	{
 		hlChar lpFileName[56];
-		strcpy(lpFileName, this->lpDirectoryItems[i].lpItemName);
+		strlcpy(lpFileName, this->lpDirectoryItems[i].lpItemName, sizeof(lpFileName));
 
 		// Check if we have just a file, or if the file has directories we need to create.
 		if(strchr(lpFileName, '/') == 0 && strchr(lpFileName, '\\') == 0)
@@ -104,7 +104,7 @@ CDirectoryFolder *CPAKFile::CreateRoot()
 			hlChar *lpToken = strtok(lpFileName, "/\\");
 			while(lpToken != 0)
 			{
-				strcpy(lpTemp, lpToken);
+				strlcpy(lpTemp, lpToken, sizeof(lpTemp));
 
 				lpToken = strtok(0, "/\\");
 

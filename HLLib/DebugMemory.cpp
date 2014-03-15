@@ -73,7 +73,7 @@ void AddTrack(void *pAddress, size_t uiSize, const char *lpFile, unsigned int ui
 
 	SAllocInfo *pAllocInfo = (SAllocInfo *)malloc(sizeof(SAllocInfo));
 	pAllocInfo->pAddress = pAddress;
-	strncpy(pAllocInfo->lpFile, lpFile, sizeof(pAllocInfo->lpFile));
+	strlcpy(pAllocInfo->lpFile, lpFile, sizeof(pAllocInfo->lpFile));
 	pAllocInfo->lpFile[sizeof(pAllocInfo->lpFile) - 1] = '\0';
 	pAllocInfo->uiLine = uiLine;
 	pAllocInfo->uiSize = uiSize;

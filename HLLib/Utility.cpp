@@ -88,8 +88,11 @@ hlBool HLLib::GetFileSize(const hlChar *lpPath, hlUInt &uiFileSize)
 #else
 	struct stat Stat;
 
-	if(stat(lpPath, &Stat) >= 0 && S_ISREG(Stat.st_mode) != 0)
+	if(stat(lpPath, &Stat) >= 0 && S_ISREG(Stat.st_mode) != 0 && Stat.st_size >= 0)
 	{
+		// FIXME: this can overflow!
+		// st_size is signed 64bit value on 64bit Linux and also on 32bit Linux if
+		// compiled with -D_FILE_OFFSET_BITS=64 (needed to support files > 2 GB)
 		uiFileSize = (hlUInt)Stat.st_size;
 		return hlTrue;
 	}
@@ -214,4 +217,53 @@ hlUInt HLLib::WStringToString(const hlWChar *lpSource, hlChar* lpDest, hlUInt ui
 	}
 	return uiCharsWritten;
 #endif
+}
+
+hlChar *HLLib::StringCopy(const hlChar *lpSource) {
+	size_t size = strlen(lpSource) + 1;
+	hlChar *lpCopy = new hlChar[size];
+	strlcpy(lpCopy, lpSource, size);
+	return lpCopy;
+}
+
+hlChar *HLLib::StringJoin(const hlChar *lpFirst, ...) {
+	hlChar *lpJoined = 0;
+
+	if (lpFirst != 0) {
+		va_list ap;
+		size_t size = strlen(lpFirst) + 1;
+
+		// sum up buffer size
+		va_start(ap, lpFirst);
+		for (;;) {
+			const hlChar *lpStr = va_arg(ap, const hlChar *);
+
+			if (lpStr == 0)
+				break;
+
+			size += strlen(lpStr);
+		}
+		va_end(ap);
+
+		// create buffer and copy strings to it
+		lpJoined = new hlChar[size];
+		strlcpy(lpJoined, lpFirst, size);
+
+		va_start(ap, lpFirst);
+		for (;;) {
+			const hlChar *lpStr = va_arg(ap, const hlChar *);
+
+			if (lpStr == 0)
+				break;
+
+			strlcat(lpJoined, lpStr, size);
+		}
+		va_end(ap);
+	}
+	else {
+		lpJoined = new hlChar[1];
+		lpJoined[0] = 0;
+	}
+
+	return lpJoined;
 }

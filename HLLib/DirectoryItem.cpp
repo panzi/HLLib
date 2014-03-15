@@ -12,13 +12,13 @@
 #include "DirectoryItem.h"
 #include "DirectoryFile.h"
 #include "DirectoryFolder.h"
+#include "Utility.h"
 
 using namespace HLLib;
 
 CDirectoryItem::CDirectoryItem(const hlChar *lpName, hlUInt uiID, hlVoid *pData, CPackage *pPackage, CDirectoryFolder *pParent) : uiID(uiID), pData(pData), pPackage(pPackage), pParent(pParent)
 {
-	this->lpName = new hlChar[strlen(lpName) + 1];
-	strcpy(this->lpName, lpName);
+	this->lpName = StringCopy(lpName);
 }
 
 CDirectoryItem::~CDirectoryItem()
@@ -89,25 +89,12 @@ const CDirectoryFolder *CDirectoryItem::GetParent() const
 
 hlVoid CDirectoryItem::GetPath(hlChar *lpPath, hlUInt uiPathSize) const
 {
-	hlChar *lpTemp = new hlChar[uiPathSize];
-
-	strncpy(lpPath, this->lpName, uiPathSize);
-	lpPath[uiPathSize - 1] = '\0';
-
-	const CDirectoryItem *pItem = this->pParent;
-	while(pItem)
-	{
-		strcpy(lpTemp, lpPath);
-
-		strncpy(lpPath, pItem->lpName, uiPathSize);
-		lpPath[uiPathSize - 1] = '\0';
-
-		strncat(lpPath, PATH_SEPARATOR_STRING, uiPathSize - strlen(lpPath) - 1);
-
-		strncat(lpPath, lpTemp, uiPathSize - strlen(lpPath) - 1);
-
-		pItem = pItem->pParent;
+	if(this->pParent) {
+		this->pParent->GetPath(lpPath, uiPathSize);
+		strlcat(lpPath, PATH_SEPARATOR_STRING, uiPathSize);
 	}
-
-	delete []lpTemp;
+	else {
+		strlcpy(lpPath, "", uiPathSize);
+	}
+	strlcat(lpPath, this->lpName, uiPathSize);
 }

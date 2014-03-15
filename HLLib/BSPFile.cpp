@@ -100,7 +100,7 @@ CDirectoryFolder *CBSPFile::CreateRoot()
 		}
 		else
 		{
-			strcat(lpFileName, ".ent");
+			strlcat(lpFileName, ".ent", sizeof(lpFileName));
 			pRoot->AddFile(lpFileName, this->pTextureHeader->uiTextureCount);
 		}
 	}
@@ -120,7 +120,7 @@ CDirectoryFolder *CBSPFile::CreateRoot()
 			continue;
 		}
 
-		sprintf(lpFileName, "%s.bmp", pTexture->lpName);
+		snprintf(lpFileName, sizeof(lpFileName), "%s.bmp", pTexture->lpName);
 
 		// Add the lump as a bitmap.
 		pRoot->AddFile(lpFileName, i);
@@ -391,8 +391,7 @@ hlVoid CBSPFile::GetFileName(hlChar *lpBuffer, hlUInt uiBufferSize)
 		uiBufferSize = (hlUInt)(lpEnd - lpStart) + 1;
 	}
 
-	strncpy(lpBuffer, lpStart, uiBufferSize);
-	lpBuffer[uiBufferSize - 1] = '\0';
+	strlcpy(lpBuffer, lpStart, uiBufferSize);
 }
 
 hlBool CBSPFile::GetLumpInfo(const CDirectoryFile &File, hlUInt &uiWidth, hlUInt &uiHeight, hlUInt &uiPaletteSize, hlUInt uiMipmap) const

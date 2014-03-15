@@ -145,8 +145,7 @@ CDirectoryFolder *CXZPFile::CreateRoot()
 				if(this->lpDirectoryEntries[i].uiFileNameCRC == this->lpDirectoryItems[j].uiFileNameCRC)
 				{
 					hlChar lpFileName[256];
-					strncpy(lpFileName, (hlChar *)this->lpDirectoryItems + this->lpDirectoryItems[j].uiNameOffset - this->pHeader->uiDirectoryItemOffset, sizeof(lpFileName));
-					lpFileName[sizeof(lpFileName) - 1] = '\0';
+					strlcpy(lpFileName, (hlChar *)this->lpDirectoryItems + this->lpDirectoryItems[j].uiNameOffset - this->pHeader->uiDirectoryItemOffset, sizeof(lpFileName));
 
 					// Check if we have just a file, or if the file has directories we need to create.
 					if(strchr(lpFileName, '/') == 0 && strchr(lpFileName, '\\') == 0)
@@ -162,7 +161,7 @@ CDirectoryFolder *CXZPFile::CreateRoot()
 						hlChar *lpToken = strtok(lpFileName, "/\\");
 						while(lpToken != 0)
 						{
-							strcpy(lpTemp, lpToken);
+							strlcpy(lpTemp, lpToken, sizeof(lpTemp));
 
 							lpToken = strtok(0, "/\\");
 
@@ -200,8 +199,8 @@ CDirectoryFolder *CXZPFile::CreateRoot()
 			const hlChar *lpLookup[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 			for(hlByte *lpCRC = (hlByte *)&this->lpDirectoryEntries[i].uiFileNameCRC; lpCRC < (hlByte *)&this->lpDirectoryEntries[i].uiFileNameCRC + sizeof(hlUInt); lpCRC++)
 			{
-				strcat(lpTemp, lpLookup[(hlByte)(*lpCRC >> 4)]);
-				strcat(lpTemp, lpLookup[(hlByte)(*lpCRC & 0x0F)]);
+				strlcat(lpTemp, lpLookup[(hlByte)(*lpCRC >> 4)], sizeof(lpTemp));
+				strlcat(lpTemp, lpLookup[(hlByte)(*lpCRC & 0x0F)], sizeof(lpTemp));
 
 			}
 

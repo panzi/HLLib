@@ -11,6 +11,7 @@
 
 #include "HLLib.h"
 #include "FileMapping.h"
+#include "Utility.h"
 
 using namespace HLLib;
 using namespace HLLib::Mapping;
@@ -21,8 +22,7 @@ CFileMapping::CFileMapping(const hlChar *lpFileName) : hFile(0), hFileMapping(0)
 CFileMapping::CFileMapping(const hlChar *lpFileName) : iFile(-1), uiMode(HL_MODE_INVALID), lpView(0), uiViewSize(0)
 #endif
 {
-	this->lpFileName = new hlChar[strlen(lpFileName) + 1];
-	strcpy(this->lpFileName, lpFileName);
+	this->lpFileName = StringCopy(lpFileName);
 
 #ifdef _WIN32
 	SYSTEM_INFO SystemInfo;

@@ -14,6 +14,7 @@
 #include "Mappings.h"
 #include "Streams.h"
 #include "Checksum.h"
+#include "Utility.h"
 
 using namespace HLLib;
 
@@ -197,21 +198,22 @@ hlBool CVPKFile::MapDataStructures()
 		const hlChar *lpExtension = strrchr(lpFileName, '.');
 		if(lpExtension && lpExtension - lpFileName > 3 && _strnicmp(lpExtension - 3, "dir", 3) == 0)
 		{
-			size_t size = strlen(lpFileName) + 2 + 1;
-			hlChar *lpArchiveFileName = new hlChar[size];  // We need 5 digits to print a short, but we already have 3 for dir.
-			size_t archiveNumberOffset = (lpExtension - lpFileName) - 3;
-			hlChar *lpArchiveNumber = lpArchiveFileName + archiveNumberOffset;
-			strncpy(lpArchiveFileName, lpFileName, size);
+			// We need 5 digits to print a short, but we already have 3 for dir.
+			size_t ulSize = strlen(lpFileName) + 2 + 1;
+			hlChar *lpArchiveFileName = new hlChar[ulSize];
+
+			size_t ulArchiveNumberOffset = (lpExtension - lpFileName) - 3;
+			hlChar *lpArchiveNumber = lpArchiveFileName + ulArchiveNumberOffset;
+
+			strlcpy(lpArchiveFileName, lpFileName, ulSize);
 
 			this->lpArchives = new VPKArchive[this->uiArchiveCount];
 			memset(this->lpArchives, 0, this->uiArchiveCount * sizeof(VPKArchive));
 			for(hlUInt i = 0; i < this->uiArchiveCount; i++)
 			{
-				hlInt iPrinted = snprintf(lpArchiveNumber, size - archiveNumberOffset, "%03u", i);
+				hlInt iPrinted = snprintf(lpArchiveNumber, ulSize - ulArchiveNumberOffset, "%03u%s", i, lpExtension);
 				if(iPrinted > 0)
 				{
-					strcat(lpArchiveNumber + iPrinted, lpExtension);
-
 					if(this->pMapping->GetMode() & HL_MODE_NO_FILEMAPPING)
 					{
 						this->lpArchives[i].pStream = new Streams::CFileStream(lpArchiveFileName);
@@ -308,8 +310,7 @@ CDirectoryFolder *CVPKFile::CreateRoot()
 			if(*pDirectoryItem->lpPath != '\0' && strcmp(pDirectoryItem->lpPath, " ") != 0)
 			{
 				// Tokenize the file path and create the directories.
-				hlChar *lpPath = new hlChar[strlen(pDirectoryItem->lpPath) + 1];
-				strcpy(lpPath, pDirectoryItem->lpPath);
+				hlChar *lpPath = StringCopy(pDirectoryItem->lpPath);
 				hlChar *lpToken = strtok(lpPath, "/\\");
 				while(lpToken != 0)
 				{
@@ -334,10 +335,7 @@ CDirectoryFolder *CVPKFile::CreateRoot()
 			pLastInsertFolder = pInsertFolder;
 		}
 
-		hlChar *lpFileName = new hlChar[strlen(pDirectoryItem->lpName) + 1 + strlen(pDirectoryItem->lpExtention) + 1];
-		strcpy(lpFileName, pDirectoryItem->lpName);
-		strcat(lpFileName, ".");
-		strcat(lpFileName, pDirectoryItem->lpExtention);
+		hlChar *lpFileName = StringJoin(pDirectoryItem->lpName, ".", pDirectoryItem->lpExtention, NULL);
 
 		pInsertFolder->AddFile(lpFileName, -1, const_cast<VPKDirectoryItem *>(pDirectoryItem));
 

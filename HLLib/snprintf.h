@@ -2,6 +2,7 @@
 #define SNPRINTF_H
 
 #include <stdio.h>
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -19,6 +19,7 @@
 #		define HLLIB_API __declspec(dllimport)
 #	endif
 #	define HLLIB_PRINTF(FMT,ARGS)
+#	define HLLIB_SENTINEL(SENTINEL)
 #else
 #	if defined(HAVE_GCCVISIBILITYPATCH) || __GNUC__ >= 4
 #		define HLLIB_API __attribute__ ((visibility("default")))
@@ -26,6 +27,7 @@
 #		define HLLIB_API
 #	endif
 #	define HLLIB_PRINTF(FMT,ARGS) __attribute__((format(printf, FMT, ARGS)))
+#	define HLLIB_SENTINEL(SENTINEL) __attribute__((sentinel(SENTINEL)))
 #endif
 
 typedef unsigned char		hlBool;
@@ -397,7 +399,6 @@ typedef hlVoid (*PDefragmentProgressExProc) (const HLDirectoryItem *pFile, hlUIn
 #ifdef _WIN32
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
-#	include "snprintf.h"
 #else
 #	define stricmp strcasecmp
 #	define _strnicmp strncasecmp
@@ -462,6 +463,18 @@ typedef hlVoid (*PDefragmentProgressExProc) (const HLDirectoryItem *pFile, hlUIn
 #include <algorithm>
 #include <list>
 #include <vector>
+
+#ifndef HAVE_SNPRINTF
+#	include "snprintf.h"
+#endif
+
+#ifndef HAVE_STRLCPY
+#	include "strlcpy.h"
+#endif
+
+#ifndef HAVE_STRLCAT
+#	include "strlcat.h"
+#endif
 
 #ifdef _WIN32
 #	define PATH_SEPARATOR_CHAR '\\'
