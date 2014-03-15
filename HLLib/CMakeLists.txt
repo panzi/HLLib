@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(HLLib)
 
 set(HLLIB_MAJOR_VERSION 2)
-set(HLLIB_MINOR_VERSION 3)
-set(HLLIB_PATCH_VERSION 0)
+set(HLLIB_MINOR_VERSION 4)
+set(HLLIB_PATCH_VERSION 5)
 
 set(HLLIB_NAME HLLib${HLLIB_MAJOR_VERSION}${HLLIB_MINOR_VERSION})
 set(HLLIB_VERSION ${HLLIB_MAJOR_VERSION}.${HLLIB_MINOR_VERSION}.${HLLIB_PATCH_VERSION})
@@ -29,7 +29,7 @@ if(MSVC)
 	endif()
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror -funroll-loops -fvisibility=hidden -O3")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Werror -funroll-loops -fvisibility=hidden -O3")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wextra -pedantic -Werror -funroll-loops -fvisibility=hidden -O3")
 endif()
 
 # compiling the library now:
@@ -67,10 +67,17 @@ set(hllib_HDRS BSPFile.h Checksum.h DebugMemory.h DirectoryFile.h DirectoryFolde
 	SGAFile.h stdafx.h Stream.h StreamMapping.h Streams.h Utility.h VBSPFile.h VPKFile.h
 	WADFile.h Wrapper.h XZPFile.h ZIPFile.h)
 
-include(CheckFunctionExists)
-check_function_exists(snprintf HAVE_SNPRINTF)
-check_function_exists(strlcpy HAVE_STRLCPY)
-check_function_exists(strlcat HAVE_STRLCAT)
+include(CheckCSourceCompiles)
+
+check_c_source_compiles("#include <stdio.h>
+int main() { char buf[64]; return snprintf(buf, sizeof(buf), \"test\"); }" HAVE_SNPRINTF)
+
+check_c_source_compiles("#include <string.h>
+int main() { char buf[64]; return (int) strlcpy(buf, \"test\", sizeof(buf)); }" HAVE_STRLCPY)
+
+check_c_source_compiles("#include <string.h>
+int main() { char buf[64] = \"\"; return (int) strlcat(buf, \"test\", sizeof(buf)); }" HAVE_STRLCAT)
+
 
 if(NOT HAVE_SNPRINTF)
 	set(hllib_SRCS ${hllib_SRCS} snprintf.c)
