@@ -25,6 +25,8 @@ using namespace HLLib;
 
 #define HL_VBSP_ZIP_CHECKSUM_LENGTH								0x00008000
 
+#define HL_FOURCC_TO_UINT(FOURCC) (hlUInt)(FOURCC[0] | FOURCC[1] << 8 | FOURCC[2] << 16 | FOURCC[3] << 24)
+
 const char *CVBSPFile::lpAttributeNames[] = { "Version", "Map Revision" };
 const char *CVBSPFile::lpItemAttributeNames[] = { "Version", "Four CC", "Zip Disk", "Zip Comment", "Create Version", "Extract Version", "Flags", "Compression Method", "CRC", "Disk", "Comment" };
 
@@ -422,6 +424,8 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 						delete []lpComment;
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 			}
 			else
@@ -441,9 +445,12 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 					}
 					case HL_VBSP_ITEM_FOUR_CC:
 					{
-						hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], *(hlUInt *)this->pHeader->lpLumps[uiID].lpFourCC, hlTrue);
+						const hlChar *lpFourCC = this->pHeader->lpLumps[uiID].lpFourCC;
+						hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], HL_FOURCC_TO_UINT(lpFourCC), hlTrue);
 						return hlTrue;
 					}
+					default:
+						break;
 				}
 
 				if(this->pEndOfCentralDirectoryRecord != 0 && pItem->GetID() == HL_VBSP_LUMP_PAKFILE)
@@ -466,11 +473,15 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 							delete []lpComment;
 							return hlTrue;
 						}
+						default:
+							break;
 					}
 				}
 			}
 			break;
 		}
+		default:
+			break;
 	}
 
 	return hlFalse;

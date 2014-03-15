@@ -197,15 +197,17 @@ hlBool CVPKFile::MapDataStructures()
 		const hlChar *lpExtension = strrchr(lpFileName, '.');
 		if(lpExtension && lpExtension - lpFileName > 3 && _strnicmp(lpExtension - 3, "dir", 3) == 0)
 		{
-			hlChar *lpArchiveFileName = new hlChar[strlen(lpFileName) + 2 + 1];  // We need 5 digits to print a short, but we already have 3 for dir.
-			hlChar *lpArchiveNumber = lpArchiveFileName + (lpExtension - lpFileName) - 3;
-			strcpy(lpArchiveFileName, lpFileName);
+			size_t size = strlen(lpFileName) + 2 + 1;
+			hlChar *lpArchiveFileName = new hlChar[size];  // We need 5 digits to print a short, but we already have 3 for dir.
+			size_t archiveNumberOffset = (lpExtension - lpFileName) - 3;
+			hlChar *lpArchiveNumber = lpArchiveFileName + archiveNumberOffset;
+			strncpy(lpArchiveFileName, lpFileName, size);
 
 			this->lpArchives = new VPKArchive[this->uiArchiveCount];
 			memset(this->lpArchives, 0, this->uiArchiveCount * sizeof(VPKArchive));
 			for(hlUInt i = 0; i < this->uiArchiveCount; i++)
 			{
-				hlInt iPrinted = sprintf(lpArchiveNumber, "%0.3u", i);
+				hlInt iPrinted = snprintf(lpArchiveNumber, size - archiveNumberOffset, "%03u", i);
 				if(iPrinted > 0)
 				{
 					strcat(lpArchiveNumber + iPrinted, lpExtension);
@@ -415,9 +417,13 @@ hlBool CVPKFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], pDirectoryItem->pDirectoryEntry->uiCRC, hlTrue);
 					return hlTrue;
 				}
+				default:
+					break;
 			}
 			break;
 		}
+		default:
+			break;
 	}
 
 	return hlFalse;

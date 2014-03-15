@@ -28,6 +28,8 @@ struct OutDesc
 
 static unsigned in(void FAR *in_desc, unsigned char FAR * FAR *input)
 {
+	(void)in_desc;
+	(void)input;
 	return 0;
 }
 
@@ -393,9 +395,13 @@ hlBool CZIPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					delete []lpComment;
 					return hlTrue;
 				}
+				default:
+					break;
 			}
 			break;
 		}
+		default:
+			break;
 	}
 
 	return hlFalse;

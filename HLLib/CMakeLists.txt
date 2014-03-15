@@ -11,6 +11,13 @@ set(HLLIB_VERSION ${HLLIB_MAJOR_VERSION}.${HLLIB_MINOR_VERSION}.${HLLIB_PATCH_VE
 
 # ---- options ----------------------------------------------------------------
 option(BUILD_DOCS "Build doxygen documentation" OFF)
+option(USE_ZLIB "Use zlib" OFF)
+
+if(USE_ZLIB)
+	find_package(ZLIB REQUIRED)
+	include_directories(${ZLIB_INCLUDE_DIRS})
+	add_definitions(-DUSE_ZLIB)
+endif()
 
 # ---- compiler flags ---------------------------------------------------------
 if(MSVC)
@@ -60,6 +67,7 @@ set(hllib_HDRS BSPFile.h Checksum.h DebugMemory.h DirectoryFile.h DirectoryFolde
 	WADFile.h Wrapper.h XZPFile.h ZIPFile.h)
 
 add_library(hllib SHARED ${hllib_SRCS} ${hllib_HDRS} HLLib.rc)
+target_link_libraries(hllib ${ZLIB_LIBRARIES})
 set_target_properties(hllib PROPERTIES SOVERSION ${HLLIB_MAJOR_VERSION} VERSION ${HLLIB_VERSION})
 
 install(TARGETS hllib DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -197,7 +197,7 @@ CDirectoryFolder *CXZPFile::CreateRoot()
 		for(hlUInt i = 0; i < this->pHeader->uiDirectoryEntryCount; i++)
 		{
 			hlChar lpTemp[16] = "";
-			hlChar *lpLookup[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
+			const hlChar *lpLookup[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 			for(hlByte *lpCRC = (hlByte *)&this->lpDirectoryEntries[i].uiFileNameCRC; lpCRC < (hlByte *)&this->lpDirectoryEntries[i].uiFileNameCRC + sizeof(hlUInt); lpCRC++)
 			{
 				strcat(lpTemp, lpLookup[(hlByte)(*lpCRC >> 4)]);
@@ -299,9 +299,13 @@ hlBool CXZPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], uiSize, hlFalse);
 					return hlTrue;
 				}
+				default:
+					break;
 			}
 			break;
 		}
+		default:
+			break;
 	}
 
 	return hlFalse;
