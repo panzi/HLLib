@@ -53,16 +53,16 @@ const hlChar *CError::GetShortFormattedErrorMessage()
 	{
 		if(*this->lpError)
 		{
-			sprintf(this->lpShortFormattedError, "Error: %s", this->lpError);
+			snprintf(this->lpShortFormattedError, ERROR_STRING_SIZE, "Error: %s", this->lpError);
 		}
 		else
 		{
-			strcpy(this->lpShortFormattedError, "<No error reported.>");
+			strncpy(this->lpShortFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
 		}
 	}
 	else
 	{
-		sprintf(this->lpShortFormattedError, "Error (0x%.8x): %s %s", this->uiSystemError, this->lpError, this->lpSystemError);
+		snprintf(this->lpShortFormattedError, ERROR_STRING_SIZE, "Error (0x%.8x): %s %s", this->uiSystemError, this->lpError, this->lpSystemError);
 	}
 
 	return this->lpShortFormattedError;
@@ -74,16 +74,16 @@ const hlChar *CError::GetLongFormattedErrorMessage()
 	{
 		if(*this->lpError)
 		{
-			sprintf(this->lpLongFormattedError, "Error:\n%s", this->lpError);
+			snprintf(this->lpLongFormattedError, ERROR_STRING_SIZE, "Error:\n%s", this->lpError);
 		}
 		else
 		{
-			strcpy(this->lpLongFormattedError, "<No error reported.>");
+			strncpy(this->lpLongFormattedError, "<No error reported.>", ERROR_STRING_SIZE);
 		}
 	}
 	else
 	{
-		sprintf(this->lpLongFormattedError, "Error:\n%s\n\nSystem Error (0x%.8x):\n%s", this->lpError, this->uiSystemError, this->lpSystemError);
+		snprintf(this->lpLongFormattedError, ERROR_STRING_SIZE, "Error:\n%s\n\nSystem Error (0x%.8x):\n%s", this->lpError, this->uiSystemError, this->lpSystemError);
 	}
 
 	return this->lpLongFormattedError;
@@ -124,7 +124,7 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 
 	if(FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, this->uiSystemError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&lpMessage, 0, NULL))
 	{
-		strcpy(this->lpSystemError, (hlChar *)lpMessage);
+		strncpy(this->lpSystemError, (hlChar *)lpMessage, ERROR_STRING_SIZE);
 
 		LocalFree(lpMessage);
 #else
@@ -134,7 +134,7 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 
 	if(lpMessage != 0)
 	{
-		strcpy(this->lpSystemError, lpMessage);
+		strncpy(this->lpSystemError, lpMessage, ERROR_STRING_SIZE);
 #endif
 
 		hlUInt uiLength = (hlUInt)strlen(this->lpSystemError);
@@ -147,6 +147,6 @@ hlVoid CError::SetSystemErrorMessageFormated(const hlChar *lpFormat, ...)
 	}
 	else
 	{
-		strcpy(this->lpSystemError, "<Unable to retrieve system error message string.>");
+		strncpy(this->lpSystemError, "<Unable to retrieve system error message string.>", ERROR_STRING_SIZE);
 	}
 }
