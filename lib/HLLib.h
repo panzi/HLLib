@@ -40,19 +40,23 @@ typedef signed int			hlInt;
 typedef unsigned int		hlUInt;
 typedef signed long			hlLong;
 typedef unsigned long		hlULong;
-typedef signed long long	hlLongLong;
-typedef unsigned long long	hlULongLong;
 typedef float				hlSingle;
 typedef double				hlDouble;
 typedef void				hlVoid;
 
 #ifdef _MSC_VER
+	typedef signed long long	hlLongLong;
+	typedef unsigned long long	hlULongLong;
 	typedef unsigned __int8		hlUInt8;
 	typedef unsigned __int16	hlUInt16;
 	typedef unsigned __int32	hlUInt32;
 	typedef unsigned __int64	hlUInt64;
 #else
 #	include <stdint.h>
+
+	// long long is not in the C++ standard
+	typedef int64_t		hlLongLong;
+	typedef uint64_t	hlULongLong;
 
 	typedef uint8_t		hlUInt8;
 	typedef uint16_t	hlUInt16;
@@ -1999,7 +2003,7 @@ class HLLIB_API CSGAFile : public CPackage
 			VERIFICATION_CRC_BLOCKS,
 			VERIFICATION_MD5_BLOCKS,
 			VERIFICATION_SHA1_BLOCKS,
-			VERIFICATION_COUNT,
+			VERIFICATION_COUNT
 		};
 
 		#pragma pack()
@@ -2144,10 +2148,10 @@ class HLLIB_API CSGAFile : public CPackage
 		typedef CSGADirectory<SGAHeader6, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile6> CSGADirectory6;
 		typedef CSGADirectory<SGAHeader6, SGADirectoryHeader7, SGASection5, SGAFolder5, SGAFile7> CSGADirectory7;
 
-		friend CSGADirectory4;
-		friend CSGADirectory5;
-		friend CSGADirectory6;
-		friend CSGADirectory7;
+		friend class CSGADirectory<SGAHeader4, SGADirectoryHeader4, SGASection4, SGAFolder4, SGAFile4>;
+		friend class CSGADirectory<SGAHeader4, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile4>;
+		friend class CSGADirectory<SGAHeader6, SGADirectoryHeader5, SGASection5, SGAFolder5, SGAFile6>;
+		friend class CSGADirectory<SGAHeader6, SGADirectoryHeader7, SGASection5, SGAFolder5, SGAFile7>;
 
 	private:
 		static const char *lpAttributeNames[];
