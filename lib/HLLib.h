@@ -1317,6 +1317,13 @@ namespace HLLib
 	private:
 		hlBool Open(Streams::IStream *pStream, hlUInt uiMode, hlBool bDeleteStream);
 		hlBool Open(Mapping::CMapping *pMapping, hlUInt uiMode, hlBool bDeleteMapping);
+		
+	public:
+		static CPackage *AutoOpen(Streams::IStream &Stream, hlUInt uiMode);
+		static CPackage *AutoOpen(Mapping::CMapping &Mapping, hlUInt uiMode);
+		static CPackage *AutoOpen(const hlChar *lpFileName, hlUInt uiMode);
+		static CPackage *AutoOpen(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode);
+		static CPackage *AutoOpen(hlVoid *pUserData, hlUInt uiMode);
 	};
 
 	//

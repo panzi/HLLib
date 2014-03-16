@@ -10,7 +10,9 @@
  */
 
 #include "HLLib.h"
+#include "Wrapper.h"
 #include "Package.h"
+#include "Packages.h"
 #include "Mappings.h"
 #include "Streams.h"
 
@@ -441,4 +443,111 @@ hlVoid CPackage::ReleaseStream(Streams::IStream *pStream) const
 hlVoid CPackage::ReleaseStreamInternal(Streams::IStream &Stream) const
 {
 	(void)Stream;
+}
+
+static CPackage *PackageFromType(HLPackageType type) {
+	switch (type) {
+	case HL_PACKAGE_NONE:
+		break;
+
+	case HL_PACKAGE_BSP:
+		return new CBSPFile();
+
+	case HL_PACKAGE_GCF:
+		return new CGCFFile();
+
+	case HL_PACKAGE_PAK:
+		return new CPAKFile();
+
+	case HL_PACKAGE_VBSP:
+		return new CVBSPFile();
+
+	case HL_PACKAGE_WAD:
+		return new CWADFile();
+
+	case HL_PACKAGE_XZP:
+		return new CXZPFile();
+
+	case HL_PACKAGE_ZIP:
+		return new CZIPFile();
+
+	case HL_PACKAGE_NCF:
+		return new CNCFFile();
+
+	case HL_PACKAGE_VPK:
+		return new CVPKFile();
+
+	case HL_PACKAGE_SGA:
+		return new CSGAFile();
+	}
+
+	return 0;
+}
+
+static CPackage *PackageFromStream(Streams::IStream *lpStream) {
+	return PackageFromType(hlGetPackageTypeFromStream(lpStream));
+}
+
+CPackage *CPackage::AutoOpen(Streams::IStream &Stream, hlUInt uiMode) {
+	CPackage *lpPackage = PackageFromStream(&Stream);
+
+	if (lpPackage != 0) {
+		lpPackage->Open(Stream, uiMode);
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::AutoOpen(Mapping::CMapping &Mapping, hlUInt uiMode) {
+	Streams::CMappingStream Stream(Mapping, 0, Mapping.GetMappingSize());
+	CPackage *lpPackage = PackageFromStream(&Stream);
+
+	if (lpPackage != 0) {
+		lpPackage->Open(Mapping, uiMode);
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::AutoOpen(const hlChar *lpFileName, hlUInt uiMode) {
+	Streams::CFileStream *lpStream = new Streams::CFileStream(lpFileName);
+	CPackage *lpPackage = PackageFromStream(lpStream);
+
+	if (lpPackage != 0) {
+		lpPackage->Open(lpStream, uiMode, hlTrue);
+	}
+	else {
+		delete lpStream;
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::AutoOpen(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode) {
+	Mapping::CMemoryMapping *lpMapping = new Mapping::CMemoryMapping(lpData, uiBufferSize);
+	Streams::CMappingStream Stream(*lpMapping, 0, lpMapping->GetMappingSize());
+	CPackage *lpPackage = PackageFromStream(&Stream);
+
+	if (lpPackage != 0) {
+		lpPackage->Open(lpMapping, uiMode, hlTrue);
+	}
+	else {
+		delete lpMapping;
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::AutoOpen(hlVoid *pUserData, hlUInt uiMode) {
+	Streams::CProcStream *lpStream = new Streams::CProcStream(pUserData);
+	CPackage *lpPackage = PackageFromStream(lpStream);
+
+	if (lpPackage != 0) {
+		lpPackage->Open(lpStream, uiMode, hlTrue);
+	}
+	else {
+		delete lpStream;
+	}
+
+	return lpPackage;
 }
