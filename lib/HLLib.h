@@ -1324,6 +1324,12 @@ namespace HLLib
 		static CPackage *AutoOpen(const hlChar *lpFileName, hlUInt uiMode);
 		static CPackage *AutoOpen(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode);
 		static CPackage *AutoOpen(hlVoid *pUserData, hlUInt uiMode);
+		
+		static CPackage *Open(Streams::IStream &Stream, hlUInt uiMode, HLPackageType ePackageType);
+		static CPackage *Open(Mapping::CMapping &Mapping, hlUInt uiMode, HLPackageType ePackageType);
+		static CPackage *Open(const hlChar *lpFileName, hlUInt uiMode, HLPackageType ePackageType);
+		static CPackage *Open(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode, HLPackageType ePackageType);
+		static CPackage *Open(hlVoid *pUserData, hlUInt uiMode, HLPackageType ePackageType);
 	};
 
 	//
