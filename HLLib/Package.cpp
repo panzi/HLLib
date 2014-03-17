@@ -445,8 +445,8 @@ hlVoid CPackage::ReleaseStreamInternal(Streams::IStream &Stream) const
 	(void)Stream;
 }
 
-static CPackage *PackageFromType(HLPackageType type) {
-	switch (type) {
+static CPackage *PackageFromType(HLPackageType ePackageType) {
+	switch (ePackageType) {
 	case HL_PACKAGE_NONE:
 		break;
 
@@ -492,7 +492,10 @@ CPackage *CPackage::AutoOpen(Streams::IStream &Stream, hlUInt uiMode) {
 	CPackage *lpPackage = PackageFromStream(&Stream);
 
 	if (lpPackage != 0) {
-		lpPackage->Open(Stream, uiMode);
+		if (!lpPackage->Open(Stream, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 
 	return lpPackage;
@@ -503,7 +506,10 @@ CPackage *CPackage::AutoOpen(Mapping::CMapping &Mapping, hlUInt uiMode) {
 	CPackage *lpPackage = PackageFromStream(&Stream);
 
 	if (lpPackage != 0) {
-		lpPackage->Open(Mapping, uiMode);
+		if (!lpPackage->Open(Mapping, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 
 	return lpPackage;
@@ -514,7 +520,10 @@ CPackage *CPackage::AutoOpen(const hlChar *lpFileName, hlUInt uiMode) {
 	CPackage *lpPackage = PackageFromStream(lpStream);
 
 	if (lpPackage != 0) {
-		lpPackage->Open(lpStream, uiMode, hlTrue);
+		if (!lpPackage->Open(lpStream, uiMode, hlTrue)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 	else {
 		delete lpStream;
@@ -529,7 +538,10 @@ CPackage *CPackage::AutoOpen(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode)
 	CPackage *lpPackage = PackageFromStream(&Stream);
 
 	if (lpPackage != 0) {
-		lpPackage->Open(lpMapping, uiMode, hlTrue);
+		if (!lpPackage->Open(lpMapping, uiMode, hlTrue)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 	else {
 		delete lpMapping;
@@ -543,10 +555,78 @@ CPackage *CPackage::AutoOpen(hlVoid *pUserData, hlUInt uiMode) {
 	CPackage *lpPackage = PackageFromStream(lpStream);
 
 	if (lpPackage != 0) {
-		lpPackage->Open(lpStream, uiMode, hlTrue);
+		if (!lpPackage->Open(lpStream, uiMode, hlTrue)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 	else {
 		delete lpStream;
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::Open(Streams::IStream &Stream, hlUInt uiMode, HLPackageType ePackageType) {
+	CPackage *lpPackage = PackageFromType(ePackageType);
+
+	if (lpPackage != 0) {
+		if (!lpPackage->Open(Stream, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::Open(Mapping::CMapping &Mapping, hlUInt uiMode, HLPackageType ePackageType) {
+	CPackage *lpPackage = PackageFromType(ePackageType);
+
+	if (lpPackage != 0) {
+		if (!lpPackage->Open(Mapping, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::Open(const hlChar *lpFileName, hlUInt uiMode, HLPackageType ePackageType) {
+	CPackage *lpPackage = PackageFromType(ePackageType);
+
+	if (lpPackage != 0) {
+		if (!lpPackage->Open(lpFileName, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::Open(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode, HLPackageType ePackageType) {
+	CPackage *lpPackage = PackageFromType(ePackageType);
+
+	if (lpPackage != 0) {
+		if (!lpPackage->Open(lpData, uiBufferSize, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
+	}
+
+	return lpPackage;
+}
+
+CPackage *CPackage::Open(hlVoid *pUserData, hlUInt uiMode, HLPackageType ePackageType) {
+	CPackage *lpPackage = PackageFromType(ePackageType);
+
+	if (lpPackage != 0) {
+		if (!lpPackage->Open(pUserData, uiMode)) {
+			delete lpPackage;
+			lpPackage = 0;
+		}
 	}
 
 	return lpPackage;
