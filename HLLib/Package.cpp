@@ -488,6 +488,10 @@ static CPackage *PackageFromStream(Streams::IStream *lpStream) {
 	return PackageFromType(hlGetPackageTypeFromStream(lpStream));
 }
 
+static CPackage *PackageFromMemory(const hlVoid *lpBuffer, hlUInt uiBufferSize) {
+	return PackageFromType(hlGetPackageTypeFromMemory(lpBuffer, uiBufferSize));
+}
+
 CPackage *CPackage::AutoOpen(Streams::IStream &Stream, hlUInt uiMode) {
 	CPackage *lpPackage = PackageFromStream(&Stream);
 
@@ -502,8 +506,12 @@ CPackage *CPackage::AutoOpen(Streams::IStream &Stream, hlUInt uiMode) {
 }
 
 CPackage *CPackage::AutoOpen(Mapping::CMapping &Mapping, hlUInt uiMode) {
-	Streams::CMappingStream Stream(Mapping, 0, Mapping.GetMappingSize());
-	CPackage *lpPackage = PackageFromStream(&Stream);
+	Mapping::CView *lpView = 0;
+	if (!Mapping.Map(lpView, 0, 512 > Mapping.GetMappingSize() ? Mapping.GetMappingSize() : 512)) {
+		return 0;
+	}
+	CPackage *lpPackage = PackageFromMemory(lpView->GetView(), lpView->GetLength());
+	Mapping.Unmap(lpView);
 
 	if (lpPackage != 0) {
 		if (!lpPackage->Open(Mapping, uiMode)) {
@@ -533,18 +541,13 @@ CPackage *CPackage::AutoOpen(const hlChar *lpFileName, hlUInt uiMode) {
 }
 
 CPackage *CPackage::AutoOpen(hlVoid *lpData, hlUInt uiBufferSize, hlUInt uiMode) {
-	Mapping::CMemoryMapping *lpMapping = new Mapping::CMemoryMapping(lpData, uiBufferSize);
-	Streams::CMappingStream Stream(*lpMapping, 0, lpMapping->GetMappingSize());
-	CPackage *lpPackage = PackageFromStream(&Stream);
+	CPackage *lpPackage = PackageFromMemory(lpData, uiBufferSize);
 
 	if (lpPackage != 0) {
-		if (!lpPackage->Open(lpMapping, uiMode, hlTrue)) {
+		if (!lpPackage->Open(lpData, uiBufferSize, uiMode)) {
 			delete lpPackage;
 			lpPackage = 0;
 		}
-	}
-	else {
-		delete lpMapping;
 	}
 
 	return lpPackage;
